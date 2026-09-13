@@ -1,0 +1,9 @@
+node_modules/
+.env
+.env.*
+!.env.example
+public/generated/
+.DS_Store
+test-results/
+dist/
+.sites-runtime/

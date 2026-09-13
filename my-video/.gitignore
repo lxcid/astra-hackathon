@@ -1,0 +1,10 @@
+node_modules
+dist
+.DS_Store
+.env
+
+out
+
+# Large original recordings and generated visual review files stay local.
+/clips/
+/review/
