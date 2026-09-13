@@ -19,7 +19,7 @@ cp .env.example .env
 npm run dev
 ```
 
-Open http://127.0.0.1:3000. Enter a theme and select **Create my world**, then **Play this world** after generation. The default model is `gpt-5.6-terra`; `OPENAI_THEME_MODEL` can select another model supporting strict structured outputs. The key requires an API account with active billing. Restart the server after changing environment settings.
+Open http://127.0.0.1:3000 for the ALDER landing page and marketing trailer. Select **Play the game** to open the world creator, or go directly to http://127.0.0.1:3000/game.html. Enter a theme and select **Create my world**, then **Play this world** after generation. The default model is `gpt-5.6-terra`; `OPENAI_THEME_MODEL` can select another model supporting strict structured outputs. The key requires an API account with active billing. Restart the server after changing environment settings.
 
 To use visual inspiration, choose **Reference image** in the creator, attach a PNG, JPEG or WebP (up to 10 MB), and describe which aspects you want in the theme. A preview lets you check or remove it before selecting **Create my world**. The browser resizes it to at most 1024 pixels and sends it with your description to OpenAI. The image guides palette, silhouettes, materials and atmosphere; it does not change combat rules or produce an exact 3D reconstruction. The uploaded image is not included in saved worlds or persisted by the app. Replaying a generated design needs no image upload.
 

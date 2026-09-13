@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#233e36" />
+    <title>ALDER — Imagine your defense</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="/game.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "/vendor/three/build/three.module.js",
+          "three/addons/": "/vendor/three/examples/jsm/"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <section id="creator" aria-labelledby="creator-heading">
+      <header class="creator-brand">
+        <span>✧ ALDER</span><span>YOUR WORLD. YOUR DEFENSE.</span>
+      </header>
+      <div class="creator-layout">
+        <div class="creator-copy">
+          <div class="eyebrow">A LITTLE IMAGINATION. A WORLD TO DEFEND.</div>
+          <h1 id="creator-heading">
+            Every world<br />starts with <em>an idea.</em>
+          </h1>
+          <p>
+            Enchanted forests. Neon cities. Kingdoms made of candy.<br />Describe
+            a world, then defend something worth saving.
+          </p>
+          <form id="theme-form">
+            <label for="theme-input">What does your world look like?</label>
+            <textarea
+              id="theme-input"
+              rows="2"
+              maxlength="160"
+              required
+              placeholder="An enchanted woodland fantasy…"
+            >
+enchanted woodland fantasy</textarea>
+            <div class="theme-suggestions" aria-label="Theme ideas">
+              <button type="button" data-prompt="enchanted woodland fantasy">
+                Enchanted woodland
+              </button>
+              <button
+                type="button"
+                data-prompt="a neon cyberpunk city defended by robots"
+              >
+                Neon cyberpunk
+              </button>
+              <button
+                type="button"
+                data-prompt="a pastel candy kingdom with cookie knights"
+              >
+                Candy kingdom
+              </button>
+              <button
+                type="button"
+                data-prompt="an underwater coral civilization"
+              >
+                Underwater realm
+              </button>
+            </div>
+            <div class="reference-picker">
+              <label for="reference-image"
+                >Reference image <span>optional</span></label
+              >
+              <input
+                id="reference-image"
+                type="file"
+                accept="image/png,image/jpeg,image/webp"
+                aria-describedby="reference-help reference-status"
+              />
+              <small id="reference-help"
+                >Guide the colors, shapes and mood. PNG, JPG or WebP · up to 10
+                MB.</small
+              >
+              <div id="reference-preview" class="hidden">
+                <img id="reference-thumbnail" alt="Selected theme reference" />
+                <div>
+                  <span id="reference-name"></span
+                  ><button id="remove-reference" type="button">
+                    Remove image
+                  </button>
+                </div>
+              </div>
+              <small
+                id="reference-status"
+                role="status"
+                aria-live="polite"
+              ></small>
+            </div>
+            <button id="generate-world" type="submit">
+              Create my world <span>↗</span>
+            </button>
+            <p id="generation-status" role="status" aria-live="polite">
+              AI-designed towers, creatures, and scenery. Your strategy brings
+              them to life.
+            </p>
+          </form>
+          <button id="example-world" class="quiet-button">
+            Explore the woodland example ↗
+          </button>
+          <button id="resume-world" class="quiet-button hidden">
+            Play your last world ↗
+          </button>
+        </div>
+        <aside class="creator-preview" aria-label="World design illustration">
+          <div class="preview-orbit orbit-one"></div>
+          <div class="preview-orbit orbit-two"></div>
+          <div class="world-emblem">
+            <span>✧</span>
+            <div class="emblem-tower tower-left"></div>
+            <div class="emblem-tower tower-center"></div>
+            <div class="emblem-tower tower-right"></div>
+            <div class="emblem-island"></div>
+          </div>
+          <div class="preview-caption">
+            <span>01 / IMAGINE</span>
+            <h2>A familiar challenge.<br />An unfamiliar world.</h2>
+            <p>
+              Four tower roles · Six waves<br />Endless places to make your
+              stand.
+            </p>
+          </div>
+        </aside>
+      </div>
+      <footer class="creator-footer">
+        <span>IMAGINE → GENERATE → DEFEND</span
+        ><span>New worlds. The same balanced rules.</span>
+      </footer>
+    </section>
+    <canvas
+      id="game"
+      aria-label="Three dimensional tower defense battlefield. Click marked sites to build, or use keys 1 through 6. N calls the next wave."
+      tabindex="0"
+    ></canvas>
+    <div id="vignette"></div>
+    <div id="damage-flash"></div>
+    <div id="loading" class="hidden">
+      <span class="seed-mark">✧</span>
+      <p>Building your world…</p>
+    </div>
+    <section id="title-screen" class="hidden">
+      <div class="title-copy">
+        <div class="eyebrow">THE WINDING HOLLOW</div>
+        <h1>ALDER</h1>
+        <p class="subtitle">Every bend is a battle.</p>
+        <p class="intro">
+          One road leads to the ancient tree.<br />Raise your towers. Hold the
+          choke points.<br />Send the hollow back into the dark.
+        </p>
+        <button id="begin">Defend the hollow <span>↗</span></button
+        ><button class="new-world quiet-button">Change theme ↗</button>
+        <button id="shuffle-route" class="quiet-button">Shuffle route ↻</button>
+        <div id="route-status" role="status"></div>
+        <div class="title-small">REAL-TIME TOWER DEFENSE · SIX WAVES</div>
+      </div>
+      <div class="title-bottom">
+        <span>An original grove. A familiar kind of strategy.</span
+        ><button id="seed-title">The original seed ↗</button>
+      </div>
+    </section>
+    <main id="hud" class="hidden">
+      <header id="resources">
+        <div class="resource">
+          <span class="resource-symbol life-symbol">♥</span
+          ><span><b id="lives-value">20</b><small>LIVES</small></span>
+        </div>
+        <div class="resource">
+          <span class="resource-symbol sap-symbol">◈</span
+          ><span><b id="gold-value">240</b><small>AMBER</small></span>
+        </div>
+        <div class="resource">
+          <span class="resource-symbol">⚑</span
+          ><span><b id="wave-value">0 / 6</b><small>WAVES</small></span>
+        </div>
+        <div class="resource">
+          <span><b id="kills-value">0</b><small>DEFEATED</small></span>
+        </div>
+      </header>
+      <div id="time-controls">
+        <button id="sound-button" aria-label="Toggle sound">♫</button
+        ><button id="pause-button" aria-label="Pause or resume">Ⅱ</button
+        ><button id="speed-button" aria-label="Simulation speed">1×</button
+        ><button id="help-button" aria-label="Controls">?</button>
+      </div>
+      <div id="objective">
+        <span class="objective-dot"></span
+        ><span id="objective-text"
+          >Build your defenses, then call the first wave.</span
+        >
+      </div>
+      <div id="wave-call">
+        <button id="next-wave"><span>N</span> Call wave 1 <b>↗</b></button
+        ><small id="wave-preview">8 enemies · A rustle in the roots</small>
+        <button
+          id="wave-info-button"
+          aria-haspopup="dialog"
+          aria-controls="wave-info"
+        >
+          Wave intel ⓘ
+        </button>
+      </div>
+      <div id="world-labels"></div>
+      <div id="announcements" aria-live="polite"></div>
+      <div id="selection" class="hidden">
+        <span class="eyebrow" id="selection-type"></span
+        ><strong id="selection-name"></strong>
+        <p id="selection-info"></p>
+        <div id="tower-commands" class="hidden">
+          <button id="upgrade-button">Upgrade</button
+          ><button id="sell-button">Sell</button>
+        </div>
+      </div>
+      <div id="action-hint">Click a site to build.</div>
+      <nav id="action-bar" aria-label="Defenses and abilities">
+        <button data-action="bow">
+          <kbd>1</kbd><span class="action-icon">➶</span
+          ><strong>Briar watch</strong><small>65 ◈ · rapid</small
+          ><span class="tip"
+            >Fast arrows. Excellent against runners. Armor reduces physical
+            damage.</span
+          >
+        </button>
+        <button data-action="stone">
+          <kbd>2</kbd><span class="action-icon">●</span
+          ><strong>Boulder lodge</strong><small>90 ◈ · splash</small
+          ><span class="tip"
+            >Lobs boulders into clusters. Pair with wardens to bunch up a
+            wave.</span
+          >
+        </button>
+        <button data-action="frost">
+          <kbd>3</kbd><span class="action-icon">❄</span
+          ><strong>Frost spire</strong><small>80 ◈ · slow</small
+          ><span class="tip"
+            >Slows enemies by 58%. Place where neighboring towers share
+            coverage.</span
+          >
+        </button>
+        <button data-action="ward">
+          <kbd>4</kbd><span class="action-icon">♜</span
+          ><strong>Sun lantern</strong><small>100 ◈ · pierce</small
+          ><span class="tip"
+            >Ignores armor. Your answer to ironbacks and the hollow elder.</span
+          >
+        </button>
+        <button data-action="rally" class="ability">
+          <kbd>5</kbd><span class="action-icon">⚔</span
+          ><strong>Root wardens</strong><small id="rally-status">Ready</small
+          ><span class="tip"
+            >Click the road. Two wardens block and fight for 13 seconds.
+            20-second cooldown.</span
+          >
+        </button>
+        <button data-action="bloom" class="bloom-action ability">
+          <kbd>6 / SPACE</kbd><span class="action-icon">✧</span
+          ><strong>Life bloom</strong
+          ><small><span id="spirit-value">100</span> / 100</small
+          ><span class="tip"
+            >Click a cluster. 65 area damage, ignores armor. Costs 40
+            spirit.</span
+          ><i id="spirit-fill"></i>
+        </button>
+      </nav>
+      <footer id="controls-line">
+        <span
+          >Click site · U upgrade · N next wave · WASD move · right drag orbit ·
+          scroll zoom</span
+        ><button id="seed-game">The original drawing ↗</button>
+      </footer>
+      <div id="pause-overlay" class="hidden">
+        <h2>The hollow waits.</h2>
+        <button id="resume-button">Resume</button
+        ><button class="new-world">Create another world</button>
+      </div>
+    </main>
+    <div id="end-screen" class="modal hidden">
+      <div>
+        <span class="eyebrow" id="end-kicker"></span>
+        <h2 id="end-title"></h2>
+        <p id="end-copy"></p>
+        <div id="end-stats"></div>
+        <button id="restart-button">Defend again</button
+        ><button class="new-world">Create another world</button>
+      </div>
+    </div>
+    <div id="help" class="modal hidden">
+      <div>
+        <span class="eyebrow">THE ROAD TO ALDER</span>
+        <h2>Make every bend count.</h2>
+        <p>
+          Enemies follow the marked road from the red flags to Alder. Each
+          escape costs lives. Amber comes from defeated enemies and cleared
+          waves.
+        </p>
+        <dl>
+          <dt>Click a marked site · 1–4</dt>
+          <dd>
+            Choose rapid arrows, boulder splash, frost slow, or armor-piercing
+            light. Click a tower to upgrade or sell it.
+          </dd>
+          <dt>5 · Root wardens</dt>
+          <dd>
+            Click the road to block two enemies. Put them inside overlapping
+            tower ranges.
+          </dd>
+          <dt>6 / Space · Life bloom</dt>
+          <dd>Click to deal area damage. Spirit regenerates.</dd>
+          <dt>N · Next wave</dt>
+          <dd>
+            Take your time preparing. Combat runs continuously once the wave
+            starts.
+          </dd>
+          <dt>WASD / right drag / scroll</dt>
+          <dd>Move, orbit, zoom. P pauses. Esc cancels.</dd>
+        </dl>
+        <button id="close-help">Back to the hollow</button>
+      </div>
+    </div>
+    <div
+      id="wave-info"
+      class="modal hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="wave-info-title"
+      aria-describedby="wave-info-summary"
+    >
+      <div class="wave-info-content">
+        <div class="wave-info-header">
+          <span class="eyebrow">KNOW YOUR ENEMY</span
+          ><button id="close-wave-info" aria-label="Close wave intel">✕</button>
+        </div>
+        <h2 id="wave-info-title">Wave intel</h2>
+        <p id="wave-info-summary"></p>
+        <label class="wave-picker-label" for="wave-picker"
+          >Inspect wave
+          <select id="wave-picker"></select
+        ></label>
+        <div id="wave-enemies"></div>
+        <p class="wave-info-footnote">
+          Combat pauses while you inspect. Enemy stats and counters stay the
+          same in every theme.
+        </p>
+      </div>
+    </div>
+    <div id="seed-modal" class="modal hidden">
+      <div class="seed-content">
+        <span class="eyebrow">YOUR WORLD DESIGN</span>
+        <h2>Your world</h2>
+        <p>A seeded route, custom units, and a world to defend.</p>
+        <small>Shuffle the route before playing. Combat rules stay fixed.</small
+        ><button id="close-seed">Return to the world</button
+        ><button class="new-world">Create another world</button>
+      </div>
+    </div>
+    <script type="module" src="/launcher.mjs"></script>
+  </body>
+</html>

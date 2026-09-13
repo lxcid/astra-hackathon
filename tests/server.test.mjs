@@ -10,9 +10,11 @@ after(async () => {
   server.closeAllConnections();
   await new Promise((resolve) => server.close(resolve));
 });
-test("server serves Three.js modules and theme entry page", async () => {
+test("server serves the landing page, game entry point, and Three.js modules", async () => {
   for (const path of [
     "/",
+    "/game.html",
+    "/landing.css",
     "/vendor/three/build/three.module.js",
     "/vendor/three/examples/jsm/controls/OrbitControls.js",
     "/theme.mjs",
@@ -21,7 +23,11 @@ test("server serves Three.js modules and theme entry page", async () => {
     assert.equal(r.status, 200);
     await r.text();
   }
-  const page = await (await fetch(base)).text();
+  const landing = await (await fetch(base)).text();
+  assert.match(landing, /youtube-nocookie.com\/embed\/Id9crKlz9Vk/);
+  assert.match(landing, /href="\/game.html"/);
+  assert.doesNotMatch(landing, /src="\/launcher.mjs"/);
+  const page = await (await fetch(base + "/game.html")).text();
   assert.match(page, /theme-form/);
   assert.match(page, /launcher.mjs/);
 });

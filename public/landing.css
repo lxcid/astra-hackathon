@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
+
+:root {
+  color-scheme: dark;
+  --paper: #101d19;
+  --ink: #eee9d6;
+  --muted: #a4b4a7;
+  --line: #314338;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--paper);
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; }
+a { color: inherit; text-decoration: none; }
+a:focus-visible { outline: 3px solid #a57d32; outline-offset: 6px; }
+h1, h2, p { margin: 0; }
+.skip-link { position: absolute; top: -80px; left: 20px; z-index: 2; background: var(--ink); color: #10261b; padding: 14px; }
+.skip-link:focus { top: 12px; }
+.site-header, main, .site-footer { width: min(1120px, calc(100% - 80px)); margin-inline: auto; }
+.site-header { min-height: 86px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line); gap: 24px; }
+.wordmark { font: 500 17px var(--sans); white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; letter-spacing: 3px; }
+.brand-symbol { font-size: 37px; margin-right: 8px; }
+nav { display: flex; align-items: center; gap: 30px; font-size: 12px; }
+.trailer-link:hover, .video-caption a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.button { display: inline-flex; align-items: center; justify-content: center; gap: 32px; min-height: 52px; padding: 16px 24px; border: 1px solid #b7d8ac; border-radius: 4px; color: #10261b; background: #b7d8ac; font-size: 13px; font-weight: 500; transition: background .2s, transform .2s; }
+.button:hover { background: #d1ebc8; transform: translateY(-2px); }
+.button span { font-size: 19px; line-height: 1; }
+.button-small { min-height: 42px; padding: 11px 17px; gap: 24px; font-size: 12px; }
+.hero { position: relative; text-align: center; padding: 44px 0 36px; }
+.eyebrow { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; }
+.eyebrow span { color: #c6b17c; margin-right: 9px; }
+h1 { font: clamp(60px, 6.5vw, 88px)/.98 var(--serif); letter-spacing: -3px; margin: 20px 0; }
+h1 em { font-weight: 400; color: #b7d8ac; }
+.intro { font-size: 14px; line-height: 1.8; color: var(--muted); margin-bottom: 24px; }
+.play-note { font-size: 10px; color: var(--muted); margin-top: 13px; }
+.trailer { max-width: 960px; margin: 0 auto; scroll-margin-top: 24px; }
+.section-label { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 14px; }
+.section-label h2 { font: 23px var(--serif); }
+.section-label > span { font-size: 9px; letter-spacing: 1.5px; white-space: nowrap; }
+.section-label > span > span { font-size: 18px; margin-left: 8px; }
+.video-frame { padding: 8px; border: 1px solid #4a6150; border-radius: 8px; background: #1a2b21; box-shadow: 0 16px 38px -25px #283b3266; }
+iframe { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; border: 0; border-radius: 3px; background: #1d2e24; }
+.video-caption { display: flex; justify-content: space-between; gap: 16px; margin-top: 14px; color: var(--muted); font-size: 10px; line-height: 1.6; }
+.video-caption a { color: var(--ink); white-space: nowrap; }
+.features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 42px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-top: 70px; padding: 38px 0 42px; }
+.step { font-size: 9px; letter-spacing: 1.5px; color: var(--muted); }
+.features h2 { font: 30px var(--serif); margin: 17px 0 12px; }
+.features p { font-size: 12px; color: var(--muted); line-height: 1.9; max-width: 310px; }
+.invitation { text-align: center; padding: 58px 0 66px; }
+.invitation-star { font-size: 40px; color: #c6b17c; }
+.invitation h2 { font: 48px/1.1 var(--serif); margin: 16px 0 26px; letter-spacing: -1px; }
+.site-footer { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 24px 0; border-top: 1px solid var(--line); }
+.site-footer .wordmark { font-size: 14px; }
+.site-footer p, .site-footer > span { font-size: 10px; color: var(--muted); }
+@media (max-width: 700px) {
+  .site-header, main, .site-footer { width: calc(100% - 40px); }
+  .site-header { min-height: 82px; gap: 12px; }
+  .wordmark { font-size: 15px; }
+  .brand-symbol { font-size: 28px; margin-right: 2px; }
+  .trailer-link { display: none; }
+  .button-small { gap: 12px; padding: 10px 12px; font-size: 11px; }
+  .hero { padding: 48px 0 38px; }
+  .eyebrow { font-size: 8px; letter-spacing: 1.3px; }
+  h1 { font-size: clamp(54px, 11vw, 76px); letter-spacing: -2px; }
+  .intro { font-size: 12px; }
+  .section-label h2 { font-size: 21px; }
+  .section-label > span { display: none; }
+  .video-frame { padding: 4px; border-radius: 5px; }
+  .video-caption { font-size: 9px; gap: 10px; }
+  .features { grid-template-columns: 1fr; gap: 28px; margin-top: 40px; padding-block: 30px; }
+  .features h2 { margin: 10px 0 8px; }
+  .features p { max-width: 100%; }
+  .invitation { padding: 40px 0 48px; }
+  .invitation h2 { font-size: 38px; }
+  .site-footer { flex-wrap: wrap; gap: 14px; }
+  .site-footer > span { width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .button { transition: none; }
+}
